@@ -1,6 +1,5 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException
 import allure
 
 
@@ -48,13 +47,6 @@ class BasePage:
         return element.is_displayed()
         
         
-    #@allure.step
-    #def switch_to_new_window(self):
-        """Переключение на последнюю вкладку (старый метод)"""
-        #handles = self.driver.window_handles
-        #if len(handles) > 0:
-            #self.driver.switch_to.window(handles[-1])
-
     @allure.step("Получение текущего URL")    
     def get_current_url(self):
         return self.driver.current_url
@@ -67,11 +59,13 @@ class BasePage:
     def wait_url_changed(self, initial_url, timeout=15):
         WebDriverWait(self.driver, timeout).until(lambda d: d.current_url != initial_url)
 
+    @allure.step("Ожидание выполнения условия")
+    def wait_until(self, condition_func, timeout=10):
+        WebDriverWait(self.driver, timeout).until(condition_func)    
+
     @allure.step("Прокрутка до элемента")
     def scroll_to_element(self, locator):
-        #try:
             element = self.driver.find_element(*locator)
             self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
             return element
-        #except NoSuchElementException:
-            #return None
+        

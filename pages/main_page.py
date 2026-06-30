@@ -52,5 +52,5 @@ class MainPage(BasePage):
         self.click_element(MainPageLocators.YANDEX_LOGO)
         self.wait_for_new_window(initial_count)
         self.switch_to_window_by_index(-1)
-        WebDriverWait(self.driver, 10).until(
-        lambda d: any(domain in d.current_url for domain in ["ya.ru", "dzen.ru", "yandex.ru"]))
+        self.wait_until(lambda d: any(domain in d.current_url for domain in ["ya.ru", "dzen.ru", "yandex.ru"]),
+            timeout=10)
